@@ -5,13 +5,17 @@ import ProductGrid from './components/ProductGrid';
 import CartButton from './components/CartButton';
 import CartModal from './components/CartModal';
 import Footer from './components/Footer';
-import { products, categories } from './data/products';
 import { Product, CartItem } from './types';
+import { useProducts } from './hooks/useProducts';
+import { useCategories } from './hooks/useCategories';
 
 function App() {
   const [activeCategory, setActiveCategory] = useState('Todos');
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  
+  const { products, loading: productsLoading } = useProducts();
+  const { categories } = useCategories();
 
   const filteredProducts =
     activeCategory === 'Todos'
@@ -70,7 +74,7 @@ function App() {
     message += `\n*TOTAL DEL PEDIDO: ${formatPrice(total)}*\n\n`;
     message += 'Espero confirmación. ¡Gracias!';
 
-    const whatsappUrl = `https://wa.me/595981234567?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/595986164500?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
@@ -84,7 +88,27 @@ function App() {
         activeCategory={activeCategory}
         onCategoryChange={setActiveCategory}
       />
-      <ProductGrid products={filteredProducts} onAddToCart={addToCart} />
+      {productsLoading ? (
+        <div className="container mx-auto px-4 py-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+                <div className="aspect-square bg-gray-200"></div>
+                <div className="p-4">
+                  <div className="h-6 bg-gray-200 rounded mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded mb-3"></div>
+                  <div className="flex items-center justify-between">
+                    <div className="h-6 w-24 bg-gray-200 rounded"></div>
+                    <div className="h-10 w-10 bg-gray-200 rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <ProductGrid products={filteredProducts} onAddToCart={addToCart} />
+      )}
       <Footer />
       <CartButton itemCount={totalItems} onClick={() => setIsCartOpen(true)} />
       <CartModal
