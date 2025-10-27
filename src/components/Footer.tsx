@@ -52,7 +52,7 @@ export default function Footer() {
 
         <div className="mt-6 pt-6 border-t border-gray-200 text-center">
           <p className="font-body text-xs text-gray-500">
-            © 2025 Nissi Pastelería. Todos los derechos reservados.
+            © 2025 Nissi Pastelería. Desarrollado por <a href="https://eientech.io" target="_blank">eien</a>.
           </p>
         </div>
       </div>
