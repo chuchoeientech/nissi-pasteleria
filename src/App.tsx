@@ -74,7 +74,7 @@ function App() {
     message += `\n*TOTAL DEL PEDIDO: ${formatPrice(total)}*\n\n`;
     message += 'Espero confirmación. ¡Gracias!';
 
-    const whatsappUrl = `https://wa.me/595986164500?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/595982959175?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 

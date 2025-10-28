@@ -16,7 +16,7 @@ export default function Footer() {
 
           <div className="flex items-center gap-6">
             <a
-              href="https://instagram.com"
+              href="https://www.instagram.com/nissipasteleria_py/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-600 hover:text-primary transition-colors"
@@ -25,7 +25,7 @@ export default function Footer() {
               <Instagram size={24} />
             </a>
             <a
-              href="https://facebook.com"
+              href="https://www.facebook.com/nissigourmet/?locale=es_ES"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-600 hover:text-primary transition-colors"
@@ -40,12 +40,12 @@ export default function Footer() {
               Consultas y pedidos
             </p>
             <a
-              href="https://wa.me/595981234567"
+              href="https://wa.me/595982959175"
               target="_blank"
               rel="noopener noreferrer"
               className="font-body text-sm font-semibold text-primary hover:text-opacity-80 transition-colors"
             >
-              0981-234-567
+              0982-959-175
             </a>
           </div>
         </div>

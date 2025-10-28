@@ -1,5 +1,6 @@
-import { X, Plus, Minus, ShoppingBag } from 'lucide-react';
+import { X, Plus, Minus, ShoppingBag, Trash2 } from 'lucide-react';
 import { CartItem } from '../types';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface CartModalProps {
   isOpen: boolean;
@@ -16,7 +17,6 @@ export default function CartModal({
   onUpdateQuantity,
   onCheckout,
 }: CartModalProps) {
-  if (!isOpen) return null;
 
   const formatPrice = (price: number) => {
     return `Gs. ${price.toLocaleString('es-PY')}`;
@@ -28,12 +28,24 @@ export default function CartModal({
   );
 
   return (
-    <>
-      <div
-        className="fixed inset-0 bg-black bg-opacity-50 z-40"
-        onClick={onClose}
-      />
-      <div className="fixed right-0 top-0 bottom-0 w-full md:w-96 bg-white shadow-xl z-50 overflow-y-auto">
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            onClick={onClose}
+          />
+          <motion.div
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="fixed right-0 top-0 bottom-0 w-full md:w-96 bg-white shadow-xl z-50 overflow-y-auto"
+          >
         <div className="p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="font-heading text-2xl font-bold text-gray-800">
@@ -58,54 +70,75 @@ export default function CartModal({
           ) : (
             <>
               <div className="space-y-4 mb-6">
-                {cartItems.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex gap-4 bg-gray-50 p-4 rounded-lg"
-                  >
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-20 h-20 object-cover rounded"
-                    />
-                    <div className="flex-1">
-                      <h3 className="font-body font-semibold text-gray-800 mb-1">
-                        {item.name}
-                      </h3>
-                      <p className="font-body text-sm text-primary font-semibold mb-2">
-                        {formatPrice(item.price)}
-                      </p>
-                      <div className="flex items-center gap-3">
-                        <button
-                          onClick={() =>
-                            onUpdateQuantity(item.id, item.quantity - 1)
-                          }
-                          className="bg-gray-200 hover:bg-gray-300 text-gray-700 w-7 h-7 rounded-full flex items-center justify-center transition-colors"
-                          aria-label="Disminuir cantidad"
-                        >
-                          <Minus size={14} />
-                        </button>
-                        <span className="font-body font-semibold text-gray-800 w-6 text-center">
-                          {item.quantity}
-                        </span>
-                        <button
-                          onClick={() =>
-                            onUpdateQuantity(item.id, item.quantity + 1)
-                          }
-                          className="bg-primary hover:bg-opacity-90 text-white w-7 h-7 rounded-full flex items-center justify-center transition-colors"
-                          aria-label="Aumentar cantidad"
-                        >
-                          <Plus size={14} />
-                        </button>
+                <AnimatePresence mode="wait">
+                  {cartItems.map((item, index) => (
+                    <motion.div
+                      key={item.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ duration: 0.2, delay: index * 0.03 }}
+                      className="flex gap-4 bg-gray-50 p-4 rounded-lg"
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-20 h-20 object-cover rounded flex-shrink-0"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-2 mb-1">
+                          <h3 className="font-body font-semibold text-gray-800 truncate">
+                            {item.name}
+                          </h3>
+                          <motion.button
+                            onClick={() => onUpdateQuantity(item.id, 0)}
+                            className="text-gray-400 hover:text-red-500 transition-colors flex-shrink-0"
+                            whileHover={{ scale: 1.15 }}
+                            whileTap={{ scale: 0.9 }}
+                            aria-label="Eliminar producto"
+                          >
+                            <Trash2 size={18} />
+                          </motion.button>
+                        </div>
+                        <p className="font-body text-sm text-primary font-semibold mb-2">
+                          {formatPrice(item.price)} c/u
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              onClick={() =>
+                                onUpdateQuantity(item.id, item.quantity - 1)
+                              }
+                              className="bg-gray-200 hover:bg-gray-300 text-gray-700 w-7 h-7 rounded-full flex items-center justify-center transition-colors"
+                              aria-label="Disminuir cantidad"
+                            >
+                              <Minus size={14} />
+                            </motion.button>
+                            <span className="font-body font-semibold text-gray-800 w-6 text-center">
+                              {item.quantity}
+                            </span>
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              onClick={() =>
+                                onUpdateQuantity(item.id, item.quantity + 1)
+                              }
+                              className="bg-primary hover:bg-opacity-90 text-white w-7 h-7 rounded-full flex items-center justify-center transition-colors"
+                              aria-label="Aumentar cantidad"
+                            >
+                              <Plus size={14} />
+                            </motion.button>
+                          </div>
+                          <p className="font-body font-semibold text-gray-800 text-sm">
+                            {formatPrice(item.price * item.quantity)}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-body font-semibold text-gray-800">
-                        {formatPrice(item.price * item.quantity)}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
               </div>
 
               <div className="border-t border-gray-200 pt-4 mb-6">
@@ -135,8 +168,10 @@ export default function CartModal({
               </button>
             </>
           )}
-        </div>
-      </div>
-    </>
+          </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   );
 }
