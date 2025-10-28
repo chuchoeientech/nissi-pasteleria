@@ -5,14 +5,17 @@ import ProductGrid from './components/ProductGrid';
 import CartButton from './components/CartButton';
 import CartModal from './components/CartModal';
 import Footer from './components/Footer';
+import CheckoutForm from './components/CheckoutForm';
 import { Product, CartItem } from './types';
 import { useProducts } from './hooks/useProducts';
 import { useCategories } from './hooks/useCategories';
+import { CheckoutData } from './components/CheckoutForm';
 
 function App() {
   const [activeCategory, setActiveCategory] = useState('Todos');
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [showCheckoutForm, setShowCheckoutForm] = useState(false);
   
   const { products, loading: productsLoading } = useProducts();
   const { categories } = useCategories();
@@ -51,10 +54,33 @@ function App() {
   };
 
   const handleCheckout = () => {
+    setShowCheckoutForm(true);
+  };
+
+  const handleConfirmCheckout = (checkoutData: CheckoutData) => {
     const formatPrice = (price: number) => `Gs. ${price.toLocaleString('es-PY')}`;
 
     let message = '¡Hola Nissi Pastelería! 👋\n\n';
     message += 'Quisiera realizar el siguiente pedido:\n\n';
+    
+    // Información del cliente
+    message += '*INFORMACIÓN DEL CLIENTE:*\n';
+    if (checkoutData.ruc) {
+      message += `RUC: ${checkoutData.ruc}\n`;
+    }
+    if (checkoutData.businessName) {
+      message += `Razón Social: ${checkoutData.businessName}\n`;
+    }
+    message += `Tipo de Pedido: ${checkoutData.orderType === 'delivery' ? 'Delivery' : 'Retiro en Tienda'}\n\n`;
+
+    // Si es delivery, agregar información de entrega
+    if (checkoutData.orderType === 'delivery') {
+      message += '*DIRECCIÓN DE ENTREGA:*\n';
+      message += `Dirección: ${checkoutData.address}\n`;
+      message += `Número de Casa: ${checkoutData.houseNumber}\n`;
+      message += `Referencia: ${checkoutData.reference}\n\n`;
+    }
+
     message += '*PRODUCTOS:*\n';
 
     cartItems.forEach((item) => {
@@ -76,6 +102,13 @@ function App() {
 
     const whatsappUrl = `https://wa.me/595982959175?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
+    
+    // Cerrar el carrito y el formulario
+    setShowCheckoutForm(false);
+    setIsCartOpen(false);
+    
+    // Limpiar el carrito
+    setCartItems([]);
   };
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -117,6 +150,11 @@ function App() {
         cartItems={cartItems}
         onUpdateQuantity={updateQuantity}
         onCheckout={handleCheckout}
+      />
+      <CheckoutForm
+        isOpen={showCheckoutForm}
+        onClose={() => setShowCheckoutForm(false)}
+        onConfirm={handleConfirmCheckout}
       />
     </div>
   );
