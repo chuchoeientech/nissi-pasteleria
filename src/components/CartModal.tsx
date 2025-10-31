@@ -141,6 +141,18 @@ export default function CartModal({
                 </AnimatePresence>
               </div>
 
+              {/* Aviso para tortas completas */}
+              <div className="mb-6">
+                <div className="flex items-start gap-3 bg-secondary/10 text-gray-700 border-l-4 border-secondary rounded-md p-3">
+                  <svg className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z"></path>
+                  </svg>
+                  <p className="font-body text-sm leading-snug">
+                    <span className="font-semibold">Importante:</span> para tortas completas (no porciones), realizá tu pedido con 24 horas de anticipación.
+                  </p>
+                </div>
+              </div>
+
               <div className="border-t border-gray-200 pt-4 mb-6">
                 <div className="flex justify-between items-center">
                   <span className="font-heading text-xl font-bold text-gray-800">

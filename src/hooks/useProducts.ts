@@ -5,6 +5,7 @@ import { Product } from '../types';
 interface SanityProduct {
   _id: string;
   name: string;
+  cantidad?: string;
   description: string;
   image: any;
   price: number;
@@ -24,6 +25,7 @@ export function useProducts() {
         const query = `*[_type == "product"] | order(name asc) {
           _id,
           name,
+          cantidad,
           description,
           image,
           price,
@@ -39,6 +41,7 @@ export function useProducts() {
         const mappedProducts: Product[] = data.map((item) => ({
           id: item._id,
           name: item.name,
+          cantidad: item.cantidad,
           description: item.description,
           price: item.price,
           image: urlFor(item.image),

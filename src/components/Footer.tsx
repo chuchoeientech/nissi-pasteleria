@@ -25,6 +25,19 @@ export default function Footer() {
               <Instagram size={24} />
             </a>
             <a
+              href="https://www.tiktok.com/@nissi_paste_py?_t=ZT-90znR0p9wH9&_r=1"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-600 hover:opacity-80 transition-opacity"
+              aria-label="TikTok"
+            >
+              <img 
+                src="https://cdn4.iconfinder.com/data/icons/social-media-flat-7/64/Social-media_Tiktok-512.png" 
+                alt="TikTok" 
+                className="w-6 h-6"
+              />
+            </a>
+            <a
               href="https://www.facebook.com/nissigourmet/?locale=es_ES"
               target="_blank"
               rel="noopener noreferrer"
