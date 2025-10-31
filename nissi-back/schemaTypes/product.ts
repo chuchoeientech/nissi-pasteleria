@@ -12,6 +12,12 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'cantidad',
+      title: 'Cantidad',
+      type: 'string',
+      description: 'Ejemplos: "100 Gramos", "1 porción 100 gramos", etc.',
+    }),
+    defineField({
       name: 'description',
       title: 'Descripción',
       type: 'text',

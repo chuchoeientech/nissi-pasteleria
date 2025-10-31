@@ -6,6 +6,7 @@ import CartButton from './components/CartButton';
 import CartModal from './components/CartModal';
 import Footer from './components/Footer';
 import CheckoutForm from './components/CheckoutForm';
+import InfoModal from './components/InfoModal';
 import { Product, CartItem } from './types';
 import { useProducts } from './hooks/useProducts';
 import { useCategories } from './hooks/useCategories';
@@ -16,6 +17,7 @@ function App() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [showCheckoutForm, setShowCheckoutForm] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState(true);
   
   const { products, loading: productsLoading } = useProducts();
   const { categories } = useCategories();
@@ -156,6 +158,7 @@ function App() {
         onClose={() => setShowCheckoutForm(false)}
         onConfirm={handleConfirmCheckout}
       />
+      <InfoModal isOpen={showInfoModal} onClose={() => setShowInfoModal(false)} />
     </div>
   );
 }

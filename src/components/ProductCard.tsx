@@ -63,9 +63,14 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
         />
       </div>
       <div className="p-4">
-        <h3 className="font-heading text-xl font-semibold text-gray-800 mb-2">
+        <h3 className="font-heading text-lg md:text-xl md:mb-2 font-semibold text-gray-800">
           {product.name}
         </h3>
+        {product.cantidad && (
+          <span className="inline-block bg-secondary/20 text-primary font-body text-[10px] md:text-xs font-medium md:font-semibold px-2 md:px-3 py-0.5 md:py-1 rounded-md mb-2 md:mb-3 leading-tight">
+            {product.cantidad}
+          </span>
+        )}
         {/* Elemento oculto para medir el contenido completo */}
         <p 
           ref={hiddenDescRef}
