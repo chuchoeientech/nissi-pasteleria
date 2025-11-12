@@ -1,20 +1,18 @@
 import { useState } from 'react';
-import Header from './components/Header';
-import CategoryFilter from './components/CategoryFilter';
-import ProductGrid from './components/ProductGrid';
-import CartButton from './components/CartButton';
-import CartModal from './components/CartModal';
-import Footer from './components/Footer';
-import CheckoutForm from './components/CheckoutForm';
-import InfoModal from './components/InfoModal';
-import { Product, CartItem } from './types';
-import { useProducts } from './hooks/useProducts';
-import { useCategories } from './hooks/useCategories';
-import { CheckoutData } from './components/CheckoutForm';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Wholesaler from './pages/wholesaler';
+import HeaderWholesaler from '../components/wholesalerComponents/HeaderWholesaler';
+import CategoryFilter from '../components/CategoryFilter';
+import ProductGrid from '../components/ProductGrid';
+import CartButton from '../components/CartButton';
+import CartModal from '../components/CartModal';
+import Footer from '../components/Footer';
+import CheckoutForm from '../components/CheckoutForm';
+import InfoModal from '../components/InfoModal';
+import { Product, CartItem } from '../types';
+import { useProducts } from '../hooks/useProducts';
+import { useCategories } from '../hooks/useCategories';
+import { CheckoutData } from '../components/CheckoutForm';
 
-function StorePage() {
+function App() {
   const [activeCategory, setActiveCategory] = useState('Todos');
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -57,18 +55,27 @@ function StorePage() {
     }
   };
 
-  const handleCheckout = () => setShowCheckoutForm(true);
+  const handleCheckout = () => {
+    setShowCheckoutForm(true);
+  };
 
   const handleConfirmCheckout = (checkoutData: CheckoutData) => {
     const formatPrice = (price: number) => `Gs. ${price.toLocaleString('es-PY')}`;
+
     let message = '¡Hola Nissi Pastelería! 👋\n\n';
     message += 'Quisiera realizar el siguiente pedido:\n\n';
     
+    // Información del cliente
     message += '*INFORMACIÓN DEL CLIENTE:*\n';
-    if (checkoutData.ruc) message += `RUC: ${checkoutData.ruc}\n`;
-    if (checkoutData.businessName) message += `Razón Social: ${checkoutData.businessName}\n`;
+    if (checkoutData.ruc) {
+      message += `RUC: ${checkoutData.ruc}\n`;
+    }
+    if (checkoutData.businessName) {
+      message += `Razón Social: ${checkoutData.businessName}\n`;
+    }
     message += `Tipo de Pedido: ${checkoutData.orderType === 'delivery' ? 'Delivery' : 'Retiro en Tienda'}\n\n`;
 
+    // Si es delivery, agregar información de entrega
     if (checkoutData.orderType === 'delivery') {
       message += '*DIRECCIÓN DE ENTREGA:*\n';
       message += `Dirección: ${checkoutData.address}\n`;
@@ -77,22 +84,32 @@ function StorePage() {
     }
 
     message += '*PRODUCTOS:*\n';
+
     cartItems.forEach((item) => {
       const itemTotal = item.price * item.quantity;
       message += `- ${item.quantity}x ${item.name} (${formatPrice(item.price)} c/u)`;
-      if (item.quantity > 1) message += ` - Total: ${formatPrice(itemTotal)}`;
+      if (item.quantity > 1) {
+        message += ` - Total: ${formatPrice(itemTotal)}`;
+      }
       message += '\n';
     });
 
-    const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const total = cartItems.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+
     message += `\n*TOTAL DEL PEDIDO: ${formatPrice(total)}*\n\n`;
     message += 'Espero confirmación. ¡Gracias!';
 
     const whatsappUrl = `https://wa.me/595982959175?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
-
+    
+    // Cerrar el carrito y el formulario
     setShowCheckoutForm(false);
     setIsCartOpen(false);
+    
+    // Limpiar el carrito
     setCartItems([]);
   };
 
@@ -100,7 +117,7 @@ function StorePage() {
 
   return (
     <div className="min-h-screen bg-background font-body">
-      <Header />
+      <HeaderWholesaler />
       <CategoryFilter
         categories={categories}
         activeCategory={activeCategory}
@@ -108,7 +125,6 @@ function StorePage() {
       />
       {productsLoading ? (
         <div className="container mx-auto px-4 py-12">
-          {/* Skeleton loading */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {[...Array(8)].map((_, i) => (
               <div key={i} className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
@@ -147,13 +163,4 @@ function StorePage() {
   );
 }
 
-export default function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<StorePage />} /> {/* ✅ cambia App → StorePage */}
-        <Route path="/wholesaler" element={<Wholesaler />} />
-      </Routes>
-    </BrowserRouter>
-  );
-}
+export default App;

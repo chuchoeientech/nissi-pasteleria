@@ -1,4 +1,4 @@
-import { useSiteSettings } from '../hooks/useSiteSettings';
+import { useSiteSettings } from '../../hooks/useSiteSettings';
 import { useNavigate } from "react-router-dom";
 
 
@@ -44,13 +44,12 @@ export default function Header() {
 
 function MiComponente() {
   const navigate = useNavigate();
-
   return (
     <button
       className="px-4 py-2 bg-primary text-white rounded-full hover:bg-secondary"
-      onClick={() => navigate("/wholesaler")}
+      onClick={() => navigate("/")}
     >
-      Mayorista
+      Minorista
     </button>
   );
 }

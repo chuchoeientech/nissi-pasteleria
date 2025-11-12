@@ -11,7 +11,7 @@ export function useSiteSettings() {
   const [settings, setSettings] = useState<SiteSettings>({
     logo: null,
     subtitle: 'pastelería',
-    tagline: 'Pastelería artesanal hecha con amor',
+    tagline: 'Pastelería artesanal hecha con amor ',
   });
   const [loading, setLoading] = useState(true);
 

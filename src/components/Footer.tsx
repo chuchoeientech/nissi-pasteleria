@@ -10,7 +10,7 @@ export default function Footer() {
               NISSI
             </h3>
             <p className="font-body text-sm text-gray-600">
-              Pastelería artesanal hecha con amor
+              Pastelería artesanal hecha con amor 
             </p>
           </div>
 
